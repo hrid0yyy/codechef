@@ -269,7 +269,11 @@ function loadLeaderboard(page = 1, search = "") {
                             alt="Profile Picture"
                             class="w-12 h-12 rounded-full border-2 border-purple-500" />
                     </td>
-                    <td class="py-4 px-6">${user.name ? user.name : user.username}</td>
+                    <td class="py-4 px-6">
+                        <a href="user-profile.php?email=${encodeURIComponent(user.email)}" class="text-blue-500 hover:underline">
+                            ${user.name}
+                        </a>
+                    </td>
                     <td class="py-4 px-6">${user.total_problems_solved}</td>
                 `;
                 tbody.appendChild(row);

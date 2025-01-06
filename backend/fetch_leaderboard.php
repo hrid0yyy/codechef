@@ -19,7 +19,7 @@ if (!empty($search)) {
 }
 
 // Fetch leaderboard data
-$query = "SELECT user_id, username, name, profilePicture, total_problems_solved 
+$query = "SELECT user_id,email, username, name, profilePicture, total_problems_solved 
           FROM users $whereClause 
           ORDER BY total_problems_solved DESC 
           LIMIT ? OFFSET ?";
