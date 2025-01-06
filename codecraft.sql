@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 04, 2025 at 08:43 PM
+-- Generation Time: Jan 06, 2025 at 07:39 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,15 +29,21 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `websiteUrl` varchar(255) DEFAULT NULL,
+  `profilePicture` varchar(255) DEFAULT NULL,
+  `verified` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`username`, `password`) VALUES
-('admin@gmail.com', 'admin');
+INSERT INTO `admin` (`username`, `password`, `name`, `createdAt`, `updatedAt`, `websiteUrl`, `profilePicture`, `verified`) VALUES
+('cc@gmail.com', '$2y$10$UPEiTt0kRAcMLYju/v7l0O32WrEjSQD486tJnmr97gRjSuMmGEPuS', '', '2025-01-06 04:47:51', '2025-01-06 06:15:32', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -302,6 +308,31 @@ INSERT INTO `submissions` (`id`, `user_id`, `problem_id`, `status`, `submission_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `super_admins`
+--
+
+CREATE TABLE `super_admins` (
+  `super_admin_id` int(11) NOT NULL,
+  `full_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `phone_number` varchar(20) DEFAULT NULL,
+  `profile_picture` varchar(255) DEFAULT NULL,
+  `role` enum('Super Admin') DEFAULT 'Super Admin',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `super_admins`
+--
+
+INSERT INTO `super_admins` (`super_admin_id`, `full_name`, `email`, `password_hash`, `phone_number`, `profile_picture`, `role`, `created_at`, `updated_at`) VALUES
+(1, 'Super Admin', 'admin@gmail.com', '$2y$10$UPEiTt0kRAcMLYju/v7l0O32WrEjSQD486tJnmr97gRjSuMmGEPuS', '0123456789', NULL, 'Super Admin', '2025-01-06 04:45:47', '2025-01-06 05:10:30');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -421,6 +452,14 @@ ALTER TABLE `submissions`
   ADD KEY `problem_id` (`problem_id`);
 
 --
+-- Indexes for table `super_admins`
+--
+ALTER TABLE `super_admins`
+  ADD PRIMARY KEY (`super_admin_id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `phone_number` (`phone_number`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -484,6 +523,12 @@ ALTER TABLE `problem_sets`
 --
 ALTER TABLE `submissions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `super_admins`
+--
+ALTER TABLE `super_admins`
+  MODIFY `super_admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`

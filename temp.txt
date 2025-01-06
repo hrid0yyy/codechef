@@ -1,56 +1,67 @@
 <?php
 session_start();
-require_once '../dbconnection.php'; // Ensure correct DB connection
+include 'dbconnection.php'; // Include your database connection file
 
-header("Content-Type: application/json");
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve and sanitize user inputs
+    $email = $conn->real_escape_string($_POST['email']);
+    $password = $conn->real_escape_string($_POST['password']);
 
-// Check if problem_id is provided in the request
-if (!isset($_GET['problem_id'])) {
-    echo json_encode(["status" => "error", "message" => "Problem ID is required"]);
+    // First, check if the credentials match an admin
+    $adminQuery = "SELECT * FROM admin WHERE username = ? AND password = ?";
+    $stmt = $conn->prepare($adminQuery);
+    $stmt->bind_param("ss", $email, $password);
+    $stmt->execute();
+    $adminResult = $stmt->get_result();
+
+    if ($adminResult->num_rows > 0) {
+        // Admin credentials match
+        $_SESSION['user'] = $email;
+        $_SESSION['role'] = 'admin';
+        header("Location: ../admin-dashboard.php");
+        exit();
+    }
+
+    // If not admin, check if the user exists in the users table
+    $userQuery = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($userQuery);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $userResult = $stmt->get_result();
+
+    if ($userResult->num_rows > 0) {
+        $user = $userResult->fetch_assoc();
+
+        // Verify the password
+        if (password_verify($password, $user['password'])) {
+            // Valid user credentials
+            $_SESSION['user'] = $user['email'];
+            $_SESSION['role'] = 'user';
+            header("Location: ../dashboard.php");
+            exit();
+        } else {
+            // Incorrect password
+            echo "<script>
+                    alert('Incorrect password. Please try again.');
+                    window.location.href = '../login.php';
+                  </script>";
+            exit();
+        }
+    } else {
+        // User does not exist
+        echo "<script>
+                alert('No account found with this email.');
+                window.location.href = '../login.php';
+              </script>";
+        exit();
+    }
+
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+} else {
+    // Invalid request method
+    header("Location: ../login.php");
     exit();
 }
-
-$problem_id = intval($_GET['problem_id']);
-
-// Fetch problem details from the database
-$query = "SELECT * FROM problem_sets WHERE problem_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $problem_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$problem = $result->fetch_assoc();
-$stmt->close();
-
-if (!$problem) {
-    echo json_encode(["status" => "error", "message" => "Problem not found"]);
-    exit();
-}
-
-// Fetch total users who solved this problem
-$query_solved = "SELECT COUNT(DISTINCT user_id) AS total_solved FROM user_problem_status WHERE problem_id = ?";
-$stmt_solved = $conn->prepare($query_solved);
-$stmt_solved->bind_param("i", $problem_id);
-$stmt_solved->execute();
-$result_solved = $stmt_solved->get_result();
-$solved_data = $result_solved->fetch_assoc();
-$total_solved = $solved_data['total_solved'] ?? 0; // Default to 0 if no users solved it
-$stmt_solved->close();
-
-// Fetch sample input/output for the problem
-$query_samples = "SELECT sample_input, sample_output FROM problem_samples WHERE problem_id = ?";
-$stmt_samples = $conn->prepare($query_samples);
-$stmt_samples->bind_param("i", $problem_id);
-$stmt_samples->execute();
-$result_samples = $stmt_samples->get_result();
-$samples = $result_samples->fetch_all(MYSQLI_ASSOC);
-$stmt_samples->close();
-
-// Send response as JSON
-echo json_encode([
-    "status" => "success",
-    "problem" => $problem,
-    "samples" => $samples,
-    "total_solved" => $total_solved
-]);
-exit();
 ?>

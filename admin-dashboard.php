@@ -58,7 +58,7 @@
               />
               <span>Contests</span>
             </a>
-            <a href="ap.php" class="flex items-center space-x-4">
+            <a href="admin-problemsets.php" class="flex items-center space-x-4">
               <img
                 src="assets/img/background/problem-sets.png"
                 width="20px"
@@ -66,6 +66,9 @@
               />
               <span>Problem Sets</span>
             </a>
+            <div class="mt-2 flex justify-center space-x-10">
+          <button onclick="openModal()" class="text-purple-600 hover:underline">Create a company account!</button>
+        </div>
           </nav>
         </div>
 
@@ -166,5 +169,66 @@
         </div>
       </main>
     </div>
+     <!-- Modal -->
+    <div id="companyModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-1/3 transform scale-95 transition-transform duration-300 ease-in-out">
+        <h2 class="text-xl font-bold text-center mb-4">Create a Company Account</h2>
+        <input id="companyName" type="text" placeholder="Name" class="w-full p-2 border border-gray-300 rounded mb-4" />
+        <input id="companyEmail" type="email" placeholder="Email" class="w-full p-2 border border-gray-300 rounded mb-4" />
+        <div class="relative mb-4">
+          <input id="companyPassword" type="password" placeholder="Password" class="w-full p-2 border border-gray-300 rounded" />
+          <span onclick="togglePassword('companyPassword')" class="absolute right-3 top-3 cursor-pointer">👁️</span>
+        </div>
+        <div class="relative mb-4">
+          <input id="confirmPassword" type="password" placeholder="Confirm Password" class="w-full p-2 border border-gray-300 rounded" />
+          <span onclick="togglePassword('confirmPassword')" class="absolute right-3 top-3 cursor-pointer">👁️</span>
+        </div>
+        <div id="errorMessage" class="text-red-500 text-center hidden"></div>
+        <div class="flex justify-end space-x-4 mt-4">
+          <button onclick="closeModal()" class="px-4 py-2 bg-gray-400 text-white rounded">Cancel</button>
+          <button onclick="submitCompanyAccount()" class="px-4 py-2 bg-purple-600 text-white rounded">Submit</button>
+        </div>
+      </div>
+    </div>
   </body>
+  <script>
+           function openModal() {
+        document.getElementById('companyModal').classList.remove('hidden');
+      }
+      function closeModal() {
+        document.getElementById('companyModal').classList.add('hidden');
+      }
+      function togglePassword(id) {
+        let input = document.getElementById(id);
+        input.type = input.type === 'password' ? 'text' : 'password';
+      }
+      function submitCompanyAccount() {
+        const name = document.getElementById('companyName').value;
+        const email = document.getElementById('companyEmail').value;
+        const password = document.getElementById('companyPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (password !== confirmPassword) {
+          document.getElementById('errorMessage').innerText = 'Passwords do not match!';
+          document.getElementById('errorMessage').classList.remove('hidden');
+          return;
+        }
+        fetch('backend/create_admin.php', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({name, email, password})
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            document.getElementById('errorMessage').innerText = data.error;
+            document.getElementById('errorMessage').classList.remove('hidden');
+          } else {
+            closeModal();
+            alert('Account request submitted successfully!');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      }
+        </script>
 </html>

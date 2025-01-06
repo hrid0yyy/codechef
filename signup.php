@@ -167,11 +167,11 @@
           </button>
         </form>
 
-        <div class="mt-2 flex justify-center space-x-10">
+        <div class="mt-2 flex justify-center space-x-5">
           <p>Have an account?</p>
           <a href="login.php" class="text-purple-600 hover:underline">Log In</a>
         </div>
-
+       
         <div class="mt-2 text-center">
           <p class="text-gray-600">Or you can sign up with:</p>
           <div class="flex justify-center space-x-4 mt-2">
@@ -213,5 +213,8 @@
         </p>
       </div>
     </div>
+      
   </body>
+ 
+   
 </html>
