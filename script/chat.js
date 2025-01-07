@@ -1,122 +1,152 @@
-document.addEventListener("DOMContentLoaded", () => {
-  let selectedUserId = null;
+document.addEventListener("DOMContentLoaded", function () {
+  const chatList = document.getElementById("chat-list");
+  const searchInput = document.getElementById("search-chat");
+  const chatBox = document.getElementById("chat-box");
+  const messageInput = document.getElementById("message-input");
+  const sendBtn = document.getElementById("send-btn");
+  const userSessionId = parseInt(
+    document.getElementById("user-session-id").value
+  ); // Get sender ID from session
+  let selectedChatPartner = null;
+  let firstLoad = true; // ✅ Track if it's the first load
 
-  function fetchUsers() {
-    fetch("backend/um/fetch_users.php")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "success") {
-          const chatList = document.getElementById("chat-list");
-          chatList.innerHTML = "";
-          data.users.forEach((user) => {
-            chatList.innerHTML += `
-                <li class="flex items-center space-x-4 cursor-pointer p-2 hover:bg-gray-200 rounded-lg transition"
-                    onclick="loadChat(${user.user_id}, '${user.name}', '${
-              user.profilePicture
-            }')">
-                  <img src="${
-                    user.profilePicture
-                  }" class="w-12 h-12 rounded-full" />
-                  <div>
-                    <h4 class="font-medium text-gray-800">${user.name}</h4>
-                    <p class="text-sm text-gray-600 truncate">${
-                      user.last_message || "No messages yet"
-                    }</p>
-                  </div>
-                  <span class="ml-auto text-sm text-gray-500">${
-                    user.last_message_time || ""
-                  }</span>
-                </li>`;
-          });
-        }
+  // ✅ Fetch & display chat list
+  async function fetchChats() {
+    try {
+      const response = await fetch("backend/chat/get_chats.php");
+      const chats = await response.json();
+
+      chatList.innerHTML = ""; // Clear existing chats
+
+      chats.forEach((chat) => {
+        const options = {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+          day: "numeric",
+          month: "short",
+        };
+        const lastMessageTime = new Date(chat.last_message_time).toLocaleString(
+          "en-US",
+          options
+        );
+
+        const unseenBadge =
+          chat.unseen_messages > 0
+            ? `<span class="ml-2 text-sm bg-red-500 text-white px-2 py-1 rounded-full">${chat.unseen_messages}</span>`
+            : "";
+
+        const chatItem = `
+          <li class="flex items-center p-3 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 cursor-pointer" 
+              data-id="${chat.chat_partner_id}" 
+              data-name="${chat.chat_partner_name}" 
+              data-pic="${chat.chat_partner_profile || "default-profile.png"}">
+              
+            <img src="${
+              chat.chat_partner_profile || "default-profile.png"
+            }" alt="${chat.chat_partner_name}" class="w-10 h-10 rounded-full">
+            <div class="ml-4 flex-1">
+              <h3 class="text-lg font-semibold">${chat.chat_partner_name}</h3>
+              <p class="text-gray-600 text-sm">${chat.last_message}</p>
+            </div>
+            <div class="text-xs text-gray-500">${lastMessageTime}</div>
+            ${unseenBadge}
+          </li>
+        `;
+
+        chatList.innerHTML += chatItem;
       });
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
   }
 
-  window.loadChat = function (userId, userName, userPic) {
-    selectedUserId = userId;
-    document.getElementById("chat-user-name").textContent = userName;
-    document.getElementById("chat-user-pic").src = userPic;
+  searchInput.addEventListener("input", function () {
+    const searchTerm = searchInput.value.toLowerCase();
+    const chatItems = chatList.querySelectorAll("li");
 
-    fetch(`backend/um/fetch_chats.php?contact_id=${userId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "success") {
-          const chatBox = document.getElementById("chat-box");
-          chatBox.innerHTML = "";
-
-          data.messages.forEach((msg, index) => {
-            const isSender = msg.sender_id !== selectedUserId; // True if logged-in user sent the message
-            const bubbleColor = isSender
-              ? "bg-blue-500 text-white"
-              : "bg-gray-300 text-gray-800";
-            const alignment = isSender ? "justify-end" : "justify-start";
-            const timestamp = new Date(msg.timestamp).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: true,
-            });
-
-            chatBox.innerHTML += `
-                        <div class="flex ${alignment} items-end space-x-2">
-                            ${
-                              !isSender
-                                ? `<img src="${userPic}" class="w-8 h-8 rounded-full self-end" />`
-                                : ""
-                            }
-                            <div class="relative px-4 py-2 rounded-2xl ${bubbleColor} max-w-md shadow-md">
-                                <p>${msg.message}</p>
-                                
-                            </div>
-                        </div>
-                    `;
-          });
-
-          chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to latest message
-        }
-      })
-      .catch((error) => console.error("Chat fetch error:", error));
-  };
-
-  document.getElementById("send-btn").addEventListener("click", () => {
-    const messageInput = document.getElementById("message-input");
-    const message = messageInput.value.trim();
-    if (!message || !selectedUserId) return;
-
-    fetch("backend/um/send_message.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ receiver_id: selectedUserId, message }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "success") {
-          // Append the new message to chat UI instantly
-          const chatBox = document.getElementById("chat-box");
-          chatBox.innerHTML += `
-                <div class="flex justify-end">
-                    <div class="bg-blue-500 text-white px-4 py-2 rounded-lg max-w-md text-right">
-                        ${message}
-                    </div>
-                </div>
-            `;
-
-          chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to latest message
-          messageInput.value = ""; // Clear input field
-
-          // Refresh chat in the background
-          setTimeout(() => {
-            loadChat(
-              selectedUserId,
-              document.getElementById("chat-user-name").textContent,
-              document.getElementById("chat-user-pic").src
-            );
-          }, 500);
-        }
-      })
-      .catch((error) => {
-        console.error("Error sending message:", error);
-      });
+    chatItems.forEach((item) => {
+      const chatName = item.getAttribute("data-name").toLowerCase();
+      item.style.display = chatName.includes(searchTerm) ? "flex" : "none";
+    });
   });
 
-  fetchUsers();
+  async function loadMessages() {
+    if (!selectedChatPartner) return;
+
+    try {
+      const response = await fetch(
+        `backend/chat/inbox_get_messages.php?chat_partner=${selectedChatPartner}`
+      );
+      const messages = await response.json();
+
+      chatBox.innerHTML = ""; // Clear chat box
+
+      messages.forEach((msg) => {
+        const isSender = msg.sender_id == userSessionId; // Compare session user ID
+        const messageElement = `
+          <div class="flex ${isSender ? "justify-end" : "justify-start"}">
+            <div class="p-3 rounded-lg max-w-xs ${
+              isSender ? "bg-purple-500 text-white" : "bg-gray-200 text-black"
+            }">
+              ${msg.message}
+           
+            </div>
+          </div>
+        `;
+        chatBox.innerHTML += messageElement;
+      });
+
+      // ✅ Auto-scroll only on first message load
+      if (firstLoad) {
+        chatBox.scrollTop = chatBox.scrollHeight;
+        firstLoad = false; // Disable auto-scroll for subsequent loads
+      }
+    } catch (error) {
+      console.error("Error loading messages:", error);
+    }
+  }
+
+  // ✅ Send new message
+  sendBtn.addEventListener("click", async function () {
+    const message = messageInput.value.trim();
+    if (!message || !selectedChatPartner) return;
+
+    try {
+      const response = await fetch("backend/chat/inbox_send_messages.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `chat_partner=${selectedChatPartner}&message=${encodeURIComponent(
+          message
+        )}`,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        messageInput.value = ""; // Clear input field
+        loadMessages(); // Reload chat
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  });
+
+  chatList.addEventListener("click", function (event) {
+    const chatItem = event.target.closest("li");
+    if (chatItem) {
+      const userId = chatItem.getAttribute("data-id");
+      const userName = chatItem.getAttribute("data-name");
+      const profilePic = chatItem.getAttribute("data-pic");
+
+      selectedChatPartner = userId;
+      document.getElementById("chat-user-name").innerText = userName;
+      document.getElementById("chat-user-pic").src = profilePic;
+
+      loadMessages(); // Load chat messages for selected user
+    }
+  });
+
+  setInterval(loadMessages, 500);
+  setInterval(fetchChats, 500);
 });

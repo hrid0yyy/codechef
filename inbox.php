@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,6 +17,8 @@
         font-optical-sizing: auto;
         font-style: normal;
       }
+
+
       #chat-box {
     display: flex;
     flex-direction: column;
@@ -137,43 +142,44 @@
             <div class="bg-gray-100 p-6 rounded-lg shadow-md">
             <h3 class="text-xl font-semibold mb-6">Chats</h3>
 
-<!-- Search Bar -->
-<input
-  type="text"
-  id="search-chat"
-  placeholder="Search Chats..."
-  class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500"
-/>
+  <!-- Search Bar -->
+  <input
+        type="text"
+        id="search-chat"
+        placeholder="Search Chats..."
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500"
+    />
 
-<ul id="chat-list" class="space-y-4">
-  <!-- Users will be dynamically loaded here -->
-</ul>
+    <!-- Chat List -->
+    <ul id="chat-list" class="space-y-4">
+        <!-- Chats will be dynamically inserted here -->
+    </ul>
 
 
             </div>
 
-            <!-- Chat Box -->
-<div class="col-span-2 bg-white p-6 rounded-lg shadow-md flex flex-col h-[80vh]">
-  <!-- Chat Header -->
-  <div class="flex items-center space-x-4 border-b pb-4">
-    <img id="chat-user-pic" src="https://via.placeholder.com/40" alt="Selected Member DP"
-      class="w-12 h-12 rounded-full" />
-    <span id="chat-user-name" class="text-lg font-semibold">Select a user</span>
-  </div>
+            <div class="col-span-2 bg-white p-6 rounded-lg shadow-md flex flex-col h-[80vh]">
+        <!-- Chat Header -->
+        <div class="flex items-center space-x-4 border-b pb-4">
+            <img id="chat-user-pic" src="https://via.placeholder.com/40" alt="Selected Member DP"
+                class="w-12 h-12 rounded-full" />
+            <span id="chat-user-name" class="text-lg font-semibold">Select a user</span>
+        </div>
+        <!-- sender id -->
+        <input type="hidden" id="user-session-id" value="<?php echo $_SESSION['user_id']; ?>">
+        <!-- Chat Messages Container -->
+        <div id="chat-box" class="flex-1 bg-gray-50 p-4 overflow-y-auto border rounded-lg space-y-1">
+            <!-- Messages will be dynamically loaded here -->
+        </div>
 
-  <!-- Chat Messages Container -->
-  <div id="chat-box" class="flex-1 bg-gray-50 p-4 overflow-y-auto border rounded-lg space-y-4">
-    <!-- Messages will be dynamically loaded here -->
-  </div>
-
-  <!-- Input Box -->
-  <div class="mt-4 flex items-center border-t pt-4">
-    <input id="message-input" type="text" placeholder="Type your message..." 
-      class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500" />
-    <button id="send-btn"
-      class="bg-purple-500 text-white px-6 py-2 rounded-r-lg hover:bg-purple-600 transition">Send</button>
-  </div>
-</div>
+        <!-- Input Box -->
+        <div class="mt-4 flex items-center border-t pt-4">
+            <input id="message-input" type="text" placeholder="Type your message..." 
+                class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+            <button id="send-btn"
+                class="bg-purple-500 text-white px-6 py-2 rounded-r-lg hover:bg-purple-600 transition">Send</button>
+        </div>
+    </div>
 
           </div>
         </section>
