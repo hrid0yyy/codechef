@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 06, 2025 at 07:39 AM
+-- Generation Time: Jan 24, 2025 at 06:38 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -86,7 +86,9 @@ CREATE TABLE `contests` (
 --
 
 INSERT INTO `contests` (`contest_id`, `contestants`, `registration_start_time`, `registration_end_time`, `contest_name`, `description`, `banner`, `start_time`, `end_time`, `created_at`, `updated_at`, `published`) VALUES
-(3, 45, '2025-01-03 21:45:00', '2025-01-03 16:50:00', 'eqw', 'sadsa', NULL, '2025-01-03 16:49:00', '2025-01-03 21:45:00', '2025-01-03 10:45:11', '2025-01-03 10:52:26', 0);
+(3, 45, '2025-01-22 21:45:00', '2025-01-29 16:50:00', 'Codecraft 1.0', 'Show your coding knowledge at codecraft 1.0', 'https://graphicsfamily.com/wp-content/uploads/2020/11/Professional-Web-Banner-AD-in-Photoshop-scaled.jpg', '2025-02-04 16:49:00', '2025-02-05 21:45:00', '2025-01-03 10:45:11', '2025-01-24 03:03:51', 1),
+(4, 40, '2025-01-20 10:14:00', '2025-01-30 10:14:00', 'aaaaaaa', 'asdsa', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiJIFnm3cPG3LXJDd91ZPHc2dri8Hvd5ZeFw&s', '2025-02-12 10:14:00', '2025-02-13 10:14:00', '2025-01-24 04:15:00', '2025-01-24 04:28:22', 1),
+(5, 50, '2025-01-01 10:22:00', '2025-01-03 10:22:00', 'Codecraft 2.0', 'code craft 2.00', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiJIFnm3cPG3LXJDd91ZPHc2dri8Hvd5ZeFw&s', '2025-01-23 10:22:00', '2025-01-28 10:22:00', '2025-01-24 04:22:54', '2025-01-24 04:37:12', 1);
 
 -- --------------------------------------------------------
 
@@ -101,6 +103,15 @@ CREATE TABLE `contest_problem_samples` (
   `sample_input` text NOT NULL,
   `sample_output` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `contest_problem_samples`
+--
+
+INSERT INTO `contest_problem_samples` (`problem_id`, `contest_id`, `sample_id`, `sample_input`, `sample_output`) VALUES
+(4, 3, 7, '98765', '35'),
+(4, 3, 8, '5', '5'),
+(5, 5, 9, '5 2 1 5 3', '4');
 
 -- --------------------------------------------------------
 
@@ -121,6 +132,14 @@ CREATE TABLE `contest_problem_sets` (
   `tags` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `contest_problem_sets`
+--
+
+INSERT INTO `contest_problem_sets` (`problem_id`, `problem_title`, `description`, `difficulty_level`, `input_format`, `output_format`, `created_at`, `updated_at`, `contest_id`, `tags`) VALUES
+(4, 'Sum of Digits', 'sadsa', 'easy', '123', '6', '2025-01-24 03:00:32', '2025-01-24 03:00:32', 3, 'Basic'),
+(5, 'Find the Missing Number', 'code craft 2.00', 'easy', 'The first line contains an integer n (the total number of integers from 1 to n).\r\nThe next n-1 lines each contain one integer, representing the elements of the array.', 'Print the missing number as a single integer.', '2025-01-24 04:24:31', '2025-01-24 04:24:31', 5, 'Array, List');
+
 -- --------------------------------------------------------
 
 --
@@ -132,23 +151,46 @@ CREATE TABLE `messages` (
   `sender_id` int(11) NOT NULL,
   `receiver_id` int(11) NOT NULL,
   `message` text NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(20) NOT NULL DEFAULT 'unseen'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `messages`
 --
 
-INSERT INTO `messages` (`id`, `sender_id`, `receiver_id`, `message`, `timestamp`) VALUES
-(9, 5, 6, 'oye', '2025-01-04 19:30:36'),
-(10, 6, 5, 'aa', '2025-01-04 19:31:01'),
-(11, 6, 5, 'asd', '2025-01-04 19:31:09'),
-(12, 6, 5, 'oye', '2025-01-04 19:32:00'),
-(13, 6, 5, 'babababa', '2025-01-04 19:32:09'),
-(14, 6, 5, 'babababa', '2025-01-04 19:32:11'),
-(15, 6, 5, 'asdsa', '2025-01-04 19:32:47'),
-(16, 6, 5, 'asdsa', '2025-01-04 19:32:56'),
-(17, 6, 5, 'asd', '2025-01-04 19:42:09');
+INSERT INTO `messages` (`id`, `sender_id`, `receiver_id`, `message`, `timestamp`, `status`) VALUES
+(9, 5, 6, 'oye', '2025-01-04 19:30:36', 'unseen'),
+(10, 6, 5, 'aa', '2025-01-04 19:31:01', 'seen'),
+(11, 6, 5, 'asd', '2025-01-04 19:31:09', 'seen'),
+(12, 6, 5, 'oye', '2025-01-04 19:32:00', 'seen'),
+(13, 6, 5, 'babababa', '2025-01-04 19:32:09', 'seen'),
+(14, 6, 5, 'babababa', '2025-01-04 19:32:11', 'seen'),
+(15, 6, 5, 'asdsa', '2025-01-04 19:32:47', 'seen'),
+(16, 6, 5, 'asdsa', '2025-01-04 19:32:56', 'seen'),
+(17, 6, 5, 'asd', '2025-01-04 19:42:09', 'seen'),
+(18, 5, 6, 'aa', '2025-01-06 12:38:14', 'unseen'),
+(19, 6, 5, 'hello', '2025-01-06 12:44:46', 'seen'),
+(20, 5, 6, 'aa', '2025-01-06 12:46:47', 'unseen'),
+(21, 6, 5, 'bai', '2025-01-06 12:49:51', 'seen'),
+(22, 5, 6, 'oyee', '2025-01-06 13:01:23', 'unseen'),
+(23, 5, 6, 'dasdsa', '2025-01-06 13:19:46', 'unseen'),
+(24, 5, 5, 'aa', '2025-01-06 13:21:50', 'seen'),
+(25, 5, 6, 'a', '2025-01-07 17:05:12', 'unseen'),
+(26, 5, 6, 'a', '2025-01-07 17:34:45', 'unseen'),
+(27, 5, 6, 'asdas', '2025-01-07 17:34:52', 'unseen'),
+(28, 5, 6, 'asdsa', '2025-01-07 17:38:12', 'unseen'),
+(29, 6, 5, 'kire', '2025-01-07 17:42:13', 'seen'),
+(30, 6, 5, 'asos?', '2025-01-07 17:42:42', 'seen'),
+(31, 6, 5, 'baai', '2025-01-07 17:43:56', 'seen'),
+(32, 5, 5, 'dsaas', '2025-01-07 17:54:28', 'seen'),
+(33, 5, 5, 'asd', '2025-01-07 17:54:29', 'seen'),
+(34, 5, 5, 'asd', '2025-01-07 17:54:30', 'seen'),
+(35, 5, 5, 'asd', '2025-01-07 17:54:31', 'seen'),
+(36, 5, 5, 'ads', '2025-01-07 17:54:33', 'seen'),
+(37, 5, 6, 'asdsa', '2025-01-24 04:12:36', 'unseen'),
+(38, 5, 6, 'kire', '2025-01-24 04:12:56', 'unseen'),
+(39, 5, 6, 'sad', '2025-01-24 04:12:59', 'unseen');
 
 -- --------------------------------------------------------
 
@@ -282,6 +324,26 @@ INSERT INTO `problem_sets` (`problem_id`, `problem_title`, `description`, `diffi
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `registrations`
+--
+
+CREATE TABLE `registrations` (
+  `user_id` int(11) NOT NULL,
+  `contest_id` int(11) NOT NULL,
+  `registration_time` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `registrations`
+--
+
+INSERT INTO `registrations` (`user_id`, `contest_id`, `registration_time`) VALUES
+(5, 3, '2025-01-24 03:53:27'),
+(5, 5, '2025-01-24 06:37:49');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `submissions`
 --
 
@@ -380,6 +442,30 @@ CREATE TABLE `user_problem_status` (
 INSERT INTO `user_problem_status` (`user_id`, `problem_id`, `solved_at`) VALUES
 (5, 7, '2025-01-04 17:39:15');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_problem_submissions`
+--
+
+CREATE TABLE `user_problem_submissions` (
+  `submission_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `problem_id` int(11) NOT NULL,
+  `contest_id` int(11) NOT NULL,
+  `solved` tinyint(1) DEFAULT 0,
+  `submitted_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_problem_submissions`
+--
+
+INSERT INTO `user_problem_submissions` (`submission_id`, `user_id`, `problem_id`, `contest_id`, `solved`, `submitted_at`) VALUES
+(1, 5, 5, 5, 1, '2025-01-24 05:11:48'),
+(2, 5, 5, 5, 0, '2025-01-24 05:12:09'),
+(3, 5, 5, 5, 0, '2025-01-24 06:15:08');
+
 --
 -- Indexes for dumped tables
 --
@@ -444,6 +530,13 @@ ALTER TABLE `problem_sets`
   ADD PRIMARY KEY (`problem_id`);
 
 --
+-- Indexes for table `registrations`
+--
+ALTER TABLE `registrations`
+  ADD PRIMARY KEY (`contest_id`,`user_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `submissions`
 --
 ALTER TABLE `submissions`
@@ -473,6 +566,15 @@ ALTER TABLE `user_problem_status`
   ADD KEY `problem_id` (`problem_id`);
 
 --
+-- Indexes for table `user_problem_submissions`
+--
+ALTER TABLE `user_problem_submissions`
+  ADD PRIMARY KEY (`submission_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `problem_id` (`problem_id`),
+  ADD KEY `contest_id` (`contest_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -486,25 +588,25 @@ ALTER TABLE `certificates`
 -- AUTO_INCREMENT for table `contests`
 --
 ALTER TABLE `contests`
-  MODIFY `contest_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `contest_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `contest_problem_samples`
 --
 ALTER TABLE `contest_problem_samples`
-  MODIFY `sample_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `sample_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `contest_problem_sets`
 --
 ALTER TABLE `contest_problem_sets`
-  MODIFY `problem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `problem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `problem_samples`
@@ -537,6 +639,12 @@ ALTER TABLE `users`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `user_problem_submissions`
+--
+ALTER TABLE `user_problem_submissions`
+  MODIFY `submission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -561,6 +669,13 @@ ALTER TABLE `participants`
   ADD CONSTRAINT `participants_ibfk_2` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `registrations`
+--
+ALTER TABLE `registrations`
+  ADD CONSTRAINT `registrations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `registrations_ibfk_2` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `submissions`
 --
 ALTER TABLE `submissions`
@@ -573,6 +688,14 @@ ALTER TABLE `submissions`
 ALTER TABLE `user_problem_status`
   ADD CONSTRAINT `user_problem_status_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_problem_status_ibfk_2` FOREIGN KEY (`problem_id`) REFERENCES `problem_sets` (`problem_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user_problem_submissions`
+--
+ALTER TABLE `user_problem_submissions`
+  ADD CONSTRAINT `user_problem_submissions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_problem_submissions_ibfk_2` FOREIGN KEY (`problem_id`) REFERENCES `contest_problem_sets` (`problem_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_problem_submissions_ibfk_3` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

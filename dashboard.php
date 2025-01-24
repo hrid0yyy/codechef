@@ -57,11 +57,11 @@ require 'backend/ud/session.php'; // Load session data
             </a>
             <a href="test-list.php" class="flex items-center space-x-4">
               <img
-                src="assets/img/background/test-active.png"
+                src="assets/img/background/test.png"
                 width="20px"
                 alt="Tests Icon"
               />
-              <span>Tests</span>
+              <span>Contests</span>
             </a>
             <a href="problems.php" class="flex items-center space-x-4">
               <img
@@ -144,362 +144,197 @@ require 'backend/ud/session.php'; // Load session data
               class="cursor-pointer"
             />
             <img
-    src="<?php echo htmlspecialchars($userProfilePicture); ?>"
-    alt="Profile Icon"
-    class="rounded-full cursor-pointer"
-    width="40"
-    height="40"
+  src="<?php echo htmlspecialchars($userProfilePicture); ?>"
+  alt="Profile Icon"
+  class="rounded-full cursor-pointer"
+  style="width: 40px; height: 40px; object-fit: cover"
 />
+
 
           </div>
         </header>
 
-        <!-- 1st Row - Recent Solving Problems and Leaderboard -->
-        <div class="grid grid-cols-3 gap-8">
-          <!-- 1st Column: Recent Solving Problems -->
-          <div class="col-span-2 bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-xl font-semibold text-purple-600 mb-4">
-              Recent Solving Problems 
-            </h2>
-            <div class="col-span-2">
-              <div class="flex space-x-4">
-                <div class="bg-white shadow-md rounded-lg p-4">
-                  <img
-                    src="assets/img/background/c.jpeg"
-                    width="150px"
-                    height="150px"
-                    alt="Problem image"
-                    class="rounded mb-3 mx-auto"
-                  />
-                  <h3 class="font-semibold">Problem 1</h3>
-                  <p class="text-gray-600 text-sm">
-                    Short description of the problem...
-                  </p>
-                  <p class="text-sm text-gray-500">Language: Python</p>
-                  <div class="flex items-center space-x-2 mt-2">
-                    <div
-                      class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center"
-                    >
-                      <p class="font-semibold text-sm">85%</p>
-                    </div>
-                    <span>Accuracy</span>
-                  </div>
-                </div>
-                <div class="bg-white shadow-md rounded-lg p-4">
-                  <img
-                    src="assets/img/background/c.jpeg"
-                    width="150px"
-                    height="150px"
-                    alt="Problem image"
-                    class="rounded mb-3 mx-auto"
-                  />
-                  <h3 class="font-semibold">Problem 1</h3>
-                  <p class="text-gray-600 text-sm">
-                    Short description of the problem...
-                  </p>
-                  <p class="text-sm text-gray-500">Language: Python</p>
-                  <div class="flex items-center space-x-2 mt-2">
-                    <div
-                      class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center"
-                    >
-                      <p class="font-semibold text-sm">85%</p>
-                    </div>
-                    <span>Accuracy</span>
-                  </div>
-                </div>
-                <div class="bg-white shadow-md rounded-lg p-4">
-                  <img
-                    src="assets/img/background/c.jpeg"
-                    width="150px"
-                    height="150px"
-                    alt="Problem image"
-                    class="rounded mb-3 mx-auto"
-                  />
-                  <h3 class="font-semibold">Problem 1</h3>
-                  <p class="text-gray-600 text-sm">
-                    Short description of the problem...
-                  </p>
-                  <p class="text-sm text-gray-500">Language: Python</p>
-                  <div class="flex items-center space-x-2 mt-2">
-                    <div
-                      class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center"
-                    >
-                      <p class="font-semibold text-sm">85%</p>
-                    </div>
-                    <span>Accuracy</span>
-                  </div>
-                </div>
-              </div>
+        <div class="grid grid-cols-2 gap-8">
+  <!-- Left Column: Upcoming Contests -->
+  <div class="bg-white shadow-lg rounded-lg p-6">
+    <h2 class="text-xl font-semibold text-purple-600 mb-4">Upcoming Coding Contests</h2>
+    <div id="contests-container" class="grid grid-cols-1 gap-6">
+      <!-- Contests will be dynamically added here -->
+    </div>
+  </div>
 
-              <!-- Pagination Buttons -->
-              <div class="flex justify-between mt-4 md:w-[800px]">
-                <div
-                  class="w-10 h-10 px-2 py-2 bg-gray-300 text-gray-700 rounded-full flex justify-center"
-                >
-                  <img
-                    src="assets/img/background/left.png"
-                    width="20px"
-                    alt="Left Arrow Icon"
-                  />
-                </div>
-                <span>Page 1 of 5</span>
-                <div
-                  class="w-10 h-10 py-2 bg-gray-300 text-gray-700 rounded-full flex justify-center"
-                >
-                  <img
-                    src="assets/img/background/right.png"
-                    width="20px"
-                    alt="Right Arrow Icon"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+  <!-- Right Column: Leaderboard -->
+  <div class="bg-white shadow-lg rounded-lg p-6">
+    <h2 class="text-xl font-semibold text-purple-600 mb-4">Leaderboard</h2>
+    <div class="space-y-4">
+      <!-- Dynamic leaderboard entries will be populated here -->
+    </div>
 
-          <!-- 2nd Column: Leaderboard -->
-          <!-- 2nd Column: Leaderboard -->
-          <div class="bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-xl font-semibold text-purple-600 mb-4">
-              Leaderboard
-            </h2>
-            <div class="space-y-4">
-              <!-- Top 3 Ranks with Highlights -->
-              <div
-                class="flex items-center justify-between bg-yellow-200 rounded-lg px-4 py-2"
-              >
-                <div class="flex items-center space-x-4">
-                  <img
-                    src="https://via.placeholder.com/40"
-                    alt="Avatar"
-                    class="w-10 h-10 rounded-full"
-                  />
-                  <span class="font-semibold">1. Alice</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <img
-                    src="assets/img/background/trophy-gold.png"
-                    alt="Trophy"
-                    class="w-6"
-                  />
-                  <span class="font-semibold text-purple-600">1200 pts</span>
-                </div>
-              </div>
-              <div
-                class="flex items-center justify-between bg-gray-200 rounded-lg px-4 py-2"
-              >
-                <div class="flex items-center space-x-4">
-                  <img
-                    src="https://via.placeholder.com/40"
-                    alt="Avatar"
-                    class="w-10 h-10 rounded-full"
-                  />
-                  <span class="font-semibold">2. Bob</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <img
-                    src="assets/img/background/trophy-silver.png"
-                    alt="Trophy"
-                    class="w-6"
-                  />
-                  <span class="font-semibold text-purple-600">1150 pts</span>
-                </div>
-              </div>
-              <div
-                class="flex items-center justify-between bg-orange-200 rounded-lg px-4 py-2"
-              >
-                <div class="flex items-center space-x-4">
-                  <img
-                    src="https://via.placeholder.com/40"
-                    alt="Avatar"
-                    class="w-10 h-10 rounded-full"
-                  />
-                  <span class="font-semibold">3. Charlie</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <img
-                    src="assets/img/background/trophy-bronze.png"
-                    alt="Trophy"
-                    class="w-6"
-                  />
-                  <span class="font-semibold text-purple-600">1100 pts</span>
-                </div>
-              </div>
+    <!-- Pagination Controls -->
+    <div class="flex justify-between mt-4">
+      <button
+        id="prevPage"
+        class="w-10 h-10 px-2 py-2 bg-gray-300 text-gray-700 rounded-full flex justify-center disabled:opacity-50"
+        disabled
+      >
+        <img src="assets/img/background/left.png" width="20px" alt="Previous Page" />
+      </button>
+      <span id="pagination-info" class="text-gray-700">Page 1 of 5</span>
+      <button
+        id="nextPage"
+        class="w-10 h-10 px-2 py-2 bg-gray-300 text-gray-700 rounded-full flex justify-center disabled:opacity-50"
+      >
+        <img src="assets/img/background/right.png" width="20px" alt="Next Page" />
+      </button>
+    </div>
+  </div>
+</div>
 
-              <!-- Other Ranks -->
-              <div class="flex items-center justify-between px-4 py-2">
-                <div class="flex items-center space-x-4">
-                  <img
-                    src="https://via.placeholder.com/40"
-                    alt="Avatar"
-                    class="w-10 h-10 rounded-full"
-                  />
-                  <span>4. Daniel</span>
-                </div>
-                <span class="font-semibold text-gray-600">1050 pts</span>
-              </div>
-              <div class="flex items-center justify-between px-4 py-2">
-                <div class="flex items-center space-x-4">
-                  <img
-                    src="https://via.placeholder.com/40"
-                    alt="Avatar"
-                    class="w-10 h-10 rounded-full"
-                  />
-                  <span>5. Eve</span>
-                </div>
-                <span class="font-semibold text-gray-600">1000 pts</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <!-- 2nd Row - Upcoming Coding Contests and Performance Dashboard -->
-        <div class="grid grid-cols-3 gap-8 mt-8">
-          <!-- 1st Column: Upcoming Coding Contests -->
-          <div class="col-span-2 bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-xl font-semibold text-purple-600 mb-4">
-              Upcoming Coding Contests
-            </h2>
-            <div class="grid grid-cols-3 gap-6">
-              <!-- Contest 1 -->
-              <div
-                class="flex flex-col items-center space-y-4 p-4 border border-gray-300 rounded-lg"
-              >
-                <img
-                  src="https://via.placeholder.com/80"
-                  alt="Contest Image"
-                  class="rounded-lg mb-4"
-                />
-                <div>
-                  <h3 class="font-semibold">Contest 1</h3>
-                  <p class="text-gray-600 text-sm">Date: Jan 15, 2025</p>
-                  <p class="text-sm text-gray-500">Sponsored By: XYZ Corp</p>
-                  <p class="font-semibold text-purple-600">Prize: $1000</p>
-                </div>
-                <button
-                  class="mt-4 px-6 py-2 bg-purple-400 text-white rounded-full hover:bg-purple-500"
-                >
-                  Register Now
-                </button>
-              </div>
 
-              <!-- Contest 2 -->
-              <div
-                class="flex flex-col items-center space-y-4 p-4 border border-gray-300 rounded-lg"
-              >
-                <img
-                  src="https://via.placeholder.com/80"
-                  alt="Contest Image"
-                  class="rounded-lg mb-4"
-                />
-                <div>
-                  <h3 class="font-semibold">Contest 2</h3>
-                  <p class="text-gray-600 text-sm">Date: Feb 20, 2025</p>
-                  <p class="text-sm text-gray-500">Sponsored By: ABC Ltd</p>
-                  <p class="font-semibold text-purple-600">Prize: $1500</p>
-                </div>
-                <button
-                  class="mt-4 px-6 py-2 bg-purple-400 text-white rounded-full hover:bg-purple-500"
-                >
-                  Register Now
-                </button>
-              </div>
-
-              <!-- Contest 3 -->
-              <div
-                class="flex flex-col items-center space-y-4 p-4 border border-gray-300 rounded-lg"
-              >
-                <img
-                  src="https://via.placeholder.com/80"
-                  alt="Contest Image"
-                  class="rounded-lg mb-4"
-                />
-                <div>
-                  <h3 class="font-semibold">Contest 3</h3>
-                  <p class="text-gray-600 text-sm">Date: Mar 5, 2025</p>
-                  <p class="text-sm text-gray-500">Sponsored By: DEF Group</p>
-                  <p class="font-semibold text-purple-600">Prize: $2000</p>
-                </div>
-                <button
-                  class="mt-4 px-6 py-2 bg-purple-400 text-white rounded-full hover:bg-purple-500"
-                >
-                  Register Now
-                </button>
-              </div>
-            </div>
-
-            <!-- Pagination -->
-            <div class="relative-box flex justify-between mt-4 md:w-[800px]">
-              <div
-                class="w-10 h-10 px-2 py-2 bg-gray-300 text-gray-700 rounded-full flex justify-center"
-              >
-                <img
-                  src="assets/img/background/left.png"
-                  width="20px"
-                  alt="Left Arrow Icon"
-                />
-              </div>
-              <div
-                class="w-10 h-10 py-2 bg-gray-300 text-gray-700 rounded-full flex justify-center"
-              >
-                <img
-                  src="assets/img/background/right.png"
-                  width="20px"
-                  alt="Right Arrow Icon"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 2nd Column: Performance Dashboard -->
-          <div class="grid grid-cols-2 gap-6">
-            <!-- Column 1: Problem Solving -->
-            <div
-              class="bg-gradient-to-r from-purple-50 to-white shadow-lg rounded-lg p-6"
-            >
-              <h2 class="text-2xl font-bold text-purple-600 mb-4">
-                Problem Solving
-              </h2>
-              <div class="space-y-4 text-gray-700">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium">Problems Solved:</span>
-                  <span class="font-semibold">25/50</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="font-medium">Contest Participations:</span>
-                  <span class="font-semibold">5</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="font-medium">Leaderboard Position:</span>
-                  <span class="font-semibold text-green-500">5th</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Column 2: Performance Stats -->
-            <div
-              class="bg-gradient-to-r from-white to-purple-50 shadow-lg rounded-lg p-6"
-            >
-              <h2 class="text-2xl font-bold text-purple-600 mb-4">
-                Performance Stats
-              </h2>
-              <div class="space-y-4 text-gray-700">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium">Accuracy:</span>
-                  <span class="font-semibold text-blue-500">90%</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="font-medium">Top Contest Position:</span>
-                  <span class="font-semibold text-yellow-500">2nd</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="font-medium">Leetcode Score:</span>
-                  <span class="font-semibold text-purple-500">1300</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </main>
     </div>
   </body>
+
+
+<script>
+    let currentPage = 1; // Keep track of the current page
+
+// Fetch and populate leaderboard
+async function fetchLeaderboard(page = 1, search = "") {
+  const url = `backend/fetch_leaderboard.php?page=${page}&search=${encodeURIComponent(search)}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Populate the leaderboard
+    populateLeaderboard(data.data);
+
+    // Update pagination info
+    const totalPages = data.totalPages;
+    document.querySelector("#pagination-info").textContent = `Page ${page} of ${totalPages}`;
+
+    // Enable/disable pagination buttons based on the current page
+    document.getElementById("prevPage").disabled = page <= 1;
+    document.getElementById("nextPage").disabled = page >= totalPages;
+  } catch (error) {
+    console.error("Error fetching leaderboard data:", error);
+    alert("Failed to load leaderboard. Please try again later.");
+  }
+}
+
+// Populate leaderboard section dynamically
+function populateLeaderboard(users) {
+  const leaderboardContainer = document.querySelector(".space-y-4");
+  leaderboardContainer.innerHTML = ""; // Clear existing content
+
+  users.forEach((user, index) => {
+    const rankClass =
+      index === 0
+        ? "bg-yellow-200"
+        : index === 1
+        ? "bg-gray-200"
+        : index === 2
+        ? "bg-orange-200"
+        : "";
+
+    const trophy =
+      index === 0
+        ? "assets/img/background/trophy-gold.png"
+        : index === 1
+        ? "assets/img/background/trophy-silver.png"
+        : index === 2
+        ? "assets/img/background/trophy-bronze.png"
+        : null;
+
+    const userHTML = `
+      <div class="flex items-center justify-between ${rankClass} rounded-lg px-4 py-2">
+        <div class="flex items-center space-x-4">
+          <img src="${user.profilePicture || 'https://via.placeholder.com/40'}" alt="Avatar" class="w-10 h-10 rounded-full" />
+          <span class="font-semibold">${index + 1}. ${user.username}</span>
+        </div>
+        <div class="flex items-center space-x-2">
+    
+          <span class="font-semibold text-purple-600">Solved ${user.total_problems_solved}</span>
+        </div>
+      </div>`;
+    leaderboardContainer.innerHTML += userHTML;
+  });
+}
+
+// Add event listeners for pagination buttons
+document.getElementById("prevPage").addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    fetchLeaderboard(currentPage);
+  }
+});
+
+document.getElementById("nextPage").addEventListener("click", () => {
+  currentPage++;
+  fetchLeaderboard(currentPage);
+});
+
+// Initialize the leaderboard on page load
+document.addEventListener("DOMContentLoaded", function () {
+  fetchLeaderboard(currentPage);
+});
+</script>
+
+
+
+    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Function to fetch contest data from the backend
+    fetch("backend/contest/upcoming.php")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch contest data.");
+        }
+        return response.json();
+      })
+      .then((contests) => {
+        const container = document.getElementById("contests-container");
+        container.innerHTML = ""; // Clear any existing content
+
+        if (contests.length === 0) {
+          container.innerHTML = `<p class="text-gray-500">No upcoming contests available.</p>`;
+          return;
+        }
+
+        contests.forEach((contest) => {
+          const contestCard = `
+            <div class="flex flex-col items-center space-y-4 p-4 border border-gray-300 rounded-lg">
+              <img
+                src="${contest.banner || 'https://via.placeholder.com/80'}"
+                alt="Contest Banner"
+                class="rounded-lg mb-4"
+              />
+              <div>
+                <h3 class="font-semibold">${contest.contest_name}</h3>
+                <p class="text-gray-600 text-sm">Registration Ends: ${new Date(contest.registration_end_time).toLocaleString()}</p>
+                <p class="text-sm text-gray-500">${contest.description}</p>
+                <p class="font-semibold text-purple-600">Contest Dates: ${new Date(contest.start_time).toLocaleDateString()} - ${new Date(contest.end_time).toLocaleDateString()}</p>
+              </div>
+              <button
+        class="mt-4 px-6 py-2 bg-purple-400 text-white rounded-full hover:bg-purple-500"
+        onclick="window.location.href='upcoming-contest.php?contest_id=${contest.contest_id}'"
+      >
+        Details
+      </button>
+            </div>`;
+          container.innerHTML += contestCard;
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        const container = document.getElementById("contests-container");
+        container.innerHTML = `<p class="text-red-500">Failed to load contests. Please try again later.</p>`;
+      });
+  });
+
+  // Placeholder function for registering for contests
+ 
+</script>
+
 </html>

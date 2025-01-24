@@ -4,13 +4,15 @@ const cors = require("cors");
 const { exec } = require("child_process");
 const fs = require("fs");
 const mysql = require("mysql");
-
+const contest = require("./contest"); // Import the new route
 const app = express();
 const PORT = 8000;
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use("/contest", contest);
 
 // MySQL Connection
 const db = mysql.createConnection({
